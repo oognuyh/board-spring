@@ -1,4 +1,4 @@
-package com.oognuyh.board.post.domain;
+package com.oognuyh.board.post.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.oognuyh.board.global.domain.BaseEntity;
+import com.oognuyh.board.global.model.BaseEntity;
 import com.oognuyh.board.post.web.dto.PostResponse;
 
 import lombok.AllArgsConstructor;

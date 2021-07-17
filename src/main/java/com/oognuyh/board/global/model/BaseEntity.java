@@ -1,4 +1,4 @@
-package com.oognuyh.board.global.domain;
+package com.oognuyh.board.global.model;
 
 import java.time.LocalDateTime;
 

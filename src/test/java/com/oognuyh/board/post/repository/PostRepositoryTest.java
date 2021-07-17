@@ -1,4 +1,4 @@
-package com.oognuyh.board.post.domain;
+package com.oognuyh.board.post.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.oognuyh.board.post.model.Post;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
