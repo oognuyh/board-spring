@@ -22,22 +22,21 @@ public class PostRequest {
     
     private Long id;
 
-    @NotEmpty
-    @Size(max = 500)
+    @NotEmpty(message = "제목을 입력하세요.")
+    @Size(max = 100, message = "100자 이하로 입력하세요.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "내용을 입력하세요")
     private String content;
 
-    @NotNull
-    private String author;
+    @NotNull(message = "작성자 없이 작성할 수 없습니다")
+    private Long userId;
 
     public Post toEntity() {
         return Post.builder()
             .id(id)
             .title(title)
             .content(content)
-            .author(author)
             .build();
     }
 }

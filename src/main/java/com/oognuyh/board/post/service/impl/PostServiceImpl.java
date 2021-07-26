@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.oognuyh.board.post.model.Post;
+import com.oognuyh.board.post.repository.CommentRepository;
 import com.oognuyh.board.post.repository.PostRepository;
 import com.oognuyh.board.post.service.PostService;
 import com.oognuyh.board.post.web.dto.PostRequest;
 import com.oognuyh.board.post.web.dto.PostResponse;
 import com.oognuyh.board.post.web.exception.PostDoesNotExistException;
+import com.oognuyh.board.user.repository.UserRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +24,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
     
     @Transactional(readOnly = true) 
     @Override
-    public List<PostResponse> findAll() {
-        return postRepository.findAll()
+    public Page<PostResponse> findPosts(Pageable pageable) {
+        List<PostResponse> posts = postRepository.findAll(pageable)
             .stream()
-            .map(Post::toResponse)
+            .map(post -> {
+                PostResponse postResponse = post.toResponse();
+                postResponse.setNumOfComments(commentRepository.countByPostId(post.getId()));
+                System.out.println(postResponse);
+                return postResponse;
+            })
             .collect(Collectors.toList());
+
+        return new PageImpl<>(posts, pageable, postRepository.count());
     }
 
     @Transactional(readOnly = true)
@@ -40,7 +54,14 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public PostResponse save(PostRequest postRequest) {
-        return postRepository.save(postRequest.toEntity())
+        Post post = postRequest.toEntity();
+
+        post.setUser(
+            userRepository.findById(postRequest.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException())
+        );
+
+        return postRepository.save(post)
             .toResponse();
     }
 
@@ -50,6 +71,9 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository
             .findById(postRequest.getId())
             .orElseThrow(() -> new PostDoesNotExistException("해당 게시글은 존재하지 않습니다."));
+        
+        if (postRequest.getUserId() != post.getUser().getId()) 
+            throw new IllegalArgumentException();
 
         post.update(postRequest.getTitle(), postRequest.getContent());
 

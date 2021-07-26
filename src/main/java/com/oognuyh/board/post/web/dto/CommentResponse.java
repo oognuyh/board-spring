@@ -11,26 +11,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
-@Builder
+@Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponse {
+public class CommentResponse {
     
     private Long id;
 
-    private String title;
-
     private String content;
+
+    private Long postId;
 
     private String author;
 
-    private Long userId;
+    private Long authorId;
 
-    private Integer numOfComments;
-
+    @Builder.Default
+    private boolean isEditable = false;
+    
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
