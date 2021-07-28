@@ -1,14 +1,14 @@
 import http from '@/api/http'
 
 export function login(email, password) {
-  return http.post('/login', {
+  return http.post('/api/v1/login', {
     email,
     password
   });
 }
 
 export function signup(user) {
-  return http.post('/signup', {
+  return http.post('/api/v1/signup', {
     ...user
   })
 }
@@ -18,7 +18,7 @@ export function getUserDetails() {
 }
 
 export function refreshToken(refreshToken) {
-  return http.post('/login', {
+  return http.post('/api/v1/login', {
     refreshToken
   })
 }
