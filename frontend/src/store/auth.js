@@ -5,9 +5,8 @@ export default {
   namespaced: true,
   state: {
     token: null,
-    userDetails: {
-        email: ""
-    }
+    userDetails: null,
+    username: null
   },
   mutations: {
     setToken(state, token) {
@@ -15,6 +14,7 @@ export default {
     },
     setUserDetails(state, userDetails) {
       state.userDetails = userDetails
+      state.username = userDetails === null ? null : userDetails.name
     }
   },
   actions: {

@@ -57,7 +57,7 @@
               <td 
                 class="text-center"
               >
-                {{ post.author }}
+                {{ post.author }}a
               </td>
               <td 
                 class="text-center"
@@ -101,8 +101,13 @@ export default {
             size: state => state.currentPage.size
         })
     },
+    watch: {
+        $route: function () {
+            this.getPosts(this.currentPage - 1)
+        }
+    },
     created () {
-      this.getPosts(this.currentPage - 1)
+        this.getPosts(this.currentPage - 1)
     },
     methods: {
         ...mapActions('board', ['getPosts']),
@@ -110,7 +115,8 @@ export default {
             this.$router.push("/post/" + post.id)
         },
         changePage() {
-            this.$router.push("?page=" + this.currentPage)
+            console.log("query.page = ", this.currentPage)
+            this.$router.push("/board?page=" + this.currentPage)
         }
     }
 }

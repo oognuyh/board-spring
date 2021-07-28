@@ -131,7 +131,7 @@ export default {
     computed: {
         ...mapState({
             validationError: state => state.error.validationError,
-            userDetails: state => state.auth.userDetails
+            userDetails: state => state.auth.userDetails === null ? {email: ""} : state.auth.userDetails
         })
     },
     methods: {

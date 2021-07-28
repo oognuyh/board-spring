@@ -10,9 +10,9 @@
       <v-spacer />
 
       <template
-        v-if="userDetails !== null"
+        v-if="username !== null"
       >
-        <span class="mr-2">Hello, {{ userDetails.name }}</span>
+        <span class="mr-2">Hello, {{ username }}</span>
         <v-btn
           icon
           @click="logout"
@@ -113,7 +113,7 @@ export default {
   }),
   computed: {
     ...mapState('auth', {
-      userDetails: state => state.userDetails
+      username: state => state.username
     })
   },
   methods: {

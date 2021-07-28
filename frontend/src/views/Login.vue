@@ -82,9 +82,6 @@ export default {
             redirect: this.$route.query.redirect || undefined
         }
     },
-      created () {
-        console.log(this.redirect)
-      },
     methods: {
       login() {
         this.$store.dispatch('auth/login', {
