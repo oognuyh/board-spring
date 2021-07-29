@@ -28,6 +28,8 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private String phoneNumber;
+
     @JsonIgnore
     private String password;
 
@@ -38,6 +40,7 @@ public class UserDetailsImpl implements UserDetails {
             .id(user.getId())
             .name(user.getName())
             .email(user.getEmail())
+            .phoneNumber(user.getPhoneNumber())
             .password(user.getPassword())
             .authorities(List.of(new SimpleGrantedAuthority(user.getRole().name())))
             .build();
