@@ -4,11 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.oognuyh.board.post.model.Post;
+import com.oognuyh.board.user.model.Roles;
+import com.oognuyh.board.user.model.User;
+import com.oognuyh.board.user.repository.UserRepository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,72 +19,71 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class PostRepositoryTest {
     @Autowired
     private PostRepository postRepository;
 
-    @DisplayName("게시글 생성")
-    @Test
+    @Autowired
+    private UserRepository userRepository;
+
+    private Post savedPost;
+
+    @BeforeEach
     void save() {
         // given
+        User user = User.builder()
+            .name("name")
+            .password("password")
+            .email("email@email.com")
+            .phoneNumber("01000000000")
+            .role(Roles.ROLE_USER)
+            .build();
+
         Post post = Post.builder()
             .title("title")
             .content("content")
-            .author("author")
+            .user(userRepository.save(user))
             .build();
-
+        
         // when
-        Post savedPost = postRepository.save(post);
+        savedPost = postRepository.save(post);
 
         // then
         assertAll(
             () -> assertThat(savedPost.getTitle()).isEqualTo(post.getTitle()),
-            () -> assertThat(savedPost.getContent()).isEqualTo(post.getContent()),
-            () -> assertThat(savedPost.getAuthor()).isEqualTo(post.getAuthor())
+            () -> assertThat(savedPost.getContent()).isEqualTo(post.getContent())
         );
     }
 
-    @DisplayName("모든 게시글 조회")
+    @DisplayName("게시글 조회")
     @Test
-    void findAll() {
-        // given
-        var fakes = Arrays.asList(
-            new Post(null, "title 1", "content", "author"),
-            new Post(null, "title 2", "content", "author"),
-            new Post(null, "title 3", "content", "author")
-        );
-
-        postRepository.saveAll(fakes);
-        
+    void find() {        
         // when
         List<Post> posts = postRepository.findAll();
 
         // then
-        assertThat(posts.size()).isEqualTo(fakes.size());
+        assertThat(posts.size()).isEqualTo(1);
     }
 
     @DisplayName("게시글 수정")
     @Test
     void update() {
         // given
-        Long id = postRepository.save(Post.builder()
-            .title("title")
-            .content("content")
-            .author("author")
-            .build()).getId();
-
         String newTitle = "new title";
         String newContent = "new content";
 
         // when
-        Post post = postRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Post post = postRepository.findById(savedPost.getId())
+            .orElseThrow(IllegalArgumentException::new);
         
         post.update(newTitle, newContent);
         
         // then
-        Post updatedPost = postRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Post updatedPost = postRepository.findById(post.getId())
+            .orElseThrow(IllegalArgumentException::new);
 
         assertAll(
             () -> assertThat(updatedPost.getTitle()).isEqualTo(newTitle),
@@ -92,17 +94,10 @@ public class PostRepositoryTest {
     @DisplayName("게시글 삭제")
     @Test    
     void delete() {
-        // given
-        Long id = postRepository.save(Post.builder()
-            .title("title")
-            .content("content")
-            .author("author")
-            .build()).getId();
-
         // when
-        postRepository.deleteById(id);
+        postRepository.deleteById(savedPost.getId());
 
         // then
-        assertTrue(postRepository.findById(id).isEmpty());
+        assertTrue(postRepository.findById(savedPost.getId()).isEmpty());
     }
 }
