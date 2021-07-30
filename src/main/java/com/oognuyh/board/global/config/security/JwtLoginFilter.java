@@ -21,9 +21,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     private ObjectMapper objectMapper = new ObjectMapper();
     private UserDetailsServiceImpl userDetailsService;
@@ -32,7 +30,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
 
-        setFilterProcessesUrl("/login");
+        setFilterProcessesUrl("/api/v1/login");
     }
 
     @SneakyThrows
@@ -41,8 +39,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             throws AuthenticationException {
         
         LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
-
-        log.info("{}", loginRequest);
 
         if (loginRequest.getRefreshToken() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(

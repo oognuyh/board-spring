@@ -10,7 +10,7 @@ import com.oognuyh.board.global.config.security.VerifiedResult;
 
 public class JwtUtils {
     private static final String SECRET_KEY = "board";
-    private static final long EXPIRATION_TIME = 20 * 60;
+    private static final long EXPIRATION_TIME = 60 * 20;
     private static final long REFRESH_TIME = 60 * 60 * 24 * 7;
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
     public static final String REFRESH_TOKEN_HEADER = "x-refresh-token";
