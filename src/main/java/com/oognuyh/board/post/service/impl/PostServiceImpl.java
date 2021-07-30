@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.oognuyh.board.post.model.Post;
-import com.oognuyh.board.post.repository.CommentRepository;
 import com.oognuyh.board.post.repository.PostRepository;
 import com.oognuyh.board.post.service.PostService;
 import com.oognuyh.board.post.web.dto.PostRequest;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     
     @Transactional(readOnly = true) 
@@ -32,12 +30,7 @@ public class PostServiceImpl implements PostService {
     public Page<PostResponse> findPosts(Pageable pageable) {
         List<PostResponse> posts = postRepository.findAll(pageable)
             .stream()
-            .map(post -> {
-                PostResponse postResponse = post.toResponse();
-                postResponse.setNumOfComments(commentRepository.countByPostId(post.getId()));
-                System.out.println(postResponse);
-                return postResponse;
-            })
+            .map(Post::toResponse)
             .collect(Collectors.toList());
 
         return new PageImpl<>(posts, pageable, postRepository.count());
