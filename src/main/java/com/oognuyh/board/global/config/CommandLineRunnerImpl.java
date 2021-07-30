@@ -77,9 +77,9 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 		));
 
 		List<Comment> comments = Arrays.asList(
-			Comment.builder().content("test content").post(posts.get(27)).user(user).build(),
-			Comment.builder().content("test content").post(posts.get(27)).user(user).build(),
-			Comment.builder().content("test content").post(posts.get(27)).user(admin).build()
+			Comment.builder().content("test content").post(posts.get(26)).user(user).build(),
+			Comment.builder().content("test content").post(posts.get(26)).user(user).build(),
+			Comment.builder().content("test content").post(posts.get(26)).user(admin).build()
 		);
 
 		commentRepository.saveAll(comments);
