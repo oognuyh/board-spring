@@ -2,15 +2,15 @@ plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id "com.moowork.node" version "1.3.1"
+	id 'com.github.node-gradle.node' version '3.1.0'
 }
 
 node {
 	version = '15.8.0'
 	npmVersion = '7.5.4'
-	workDir = file('./frontend')
-	npmWorkDir = file('./frontend')
-	nodeModulesDir = file('./frontend')
+	download = true
+	workDir = file('./frontend/nodejs')
+	npmWorkDir = file('./frontend/npm')
 }
 
 group = 'com.oognuyh'
@@ -48,12 +48,14 @@ test {
 }
 
 task setup(type: NpmTask) {
+	workingDir = file('./frontend')
 	args = ['install']
 	inputs.files file('package.json')
 	outputs.files file('node_modules')
 }
 
 task buildFrontend(type: NpmTask, dependsOn: setup) {
+	workingDir = file('./frontend')
     args = ['run', 'build']
 }
 
