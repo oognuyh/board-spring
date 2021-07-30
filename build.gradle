@@ -2,6 +2,15 @@ plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.moowork.node" version "1.3.1"
+}
+
+node {
+	version = '15.8.0'
+	npmVersion = '7.5.4'
+	workDir = file('./frontend')
+	npmWorkDir = file('./frontend')
+	nodeModulesDir = file('./frontend')
 }
 
 group = 'com.oognuyh'
@@ -23,14 +32,29 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'com.auth0:java-jwt:3.18.1'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
 	useJUnitPlatform()
 }
+
+task setup(type: NpmTask) {
+	args = ['install']
+	inputs.files file('package.json')
+	outputs.files file('node_modules')
+}
+
+task buildFrontend(type: NpmTask, dependsOn: setup) {
+    args = ['run', 'build']
+}
+
+processResources.dependsOn 'buildFrontend'
