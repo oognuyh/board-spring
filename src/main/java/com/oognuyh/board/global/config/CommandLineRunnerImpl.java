@@ -14,13 +14,17 @@ import com.oognuyh.board.user.model.User;
 import com.oognuyh.board.user.repository.UserRepository;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @Transactional
+@Profile("dev")
 @RequiredArgsConstructor
 public class CommandLineRunnerImpl implements CommandLineRunner {
 	private final UserRepository userRepository;
@@ -30,6 +34,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		log.info("Insert fake data into database");
+
 		User admin = userRepository.save(User.builder()
 			.email("admin")
 			.password(passwordEncoder.encode("admin"))
