@@ -38,6 +38,7 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     bucket: oognuyh-board-build
     bundle_type: zip
+    key: springboot-board-webservice.zip
     application: springboot-board-webservice
     deployment_group: springboot-board-webservice-group
     region: ap-northeast-2
