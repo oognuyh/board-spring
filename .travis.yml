@@ -41,7 +41,7 @@ deploy:
     key: springboot-board-webservice.zip
     application: springboot-board-webservice
     deployment_group: springboot-board-webservice-group
-    region: us-east-2
+    region: ap-northeast-2
     wait-until-deployed: true
   
 notifications:
