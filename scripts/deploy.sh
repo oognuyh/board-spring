@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT_NAME=board-spring
+PROJECT_NAME=springboot-board-webservice
 
 echo "> Copy build file"
 
