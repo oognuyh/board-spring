@@ -9,7 +9,7 @@ cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
 echo "> Check pid of the currently running application"
 
-CURRENT_PID=${pgrep -fl ${PROJECT_NAME} | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl springboot-board-webservice | grep jar | awk '{print $1}')
 
 if [ -z "$CURRENT_PID" ]; then
     echo "> No application is currently running"
