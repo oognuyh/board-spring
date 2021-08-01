@@ -57,7 +57,7 @@
               <td 
                 class="text-center"
               >
-                {{ post.author }}a
+                {{ post.author }}
               </td>
               <td 
                 class="text-center"
